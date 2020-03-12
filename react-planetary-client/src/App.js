@@ -1,11 +1,12 @@
 import React from 'react';
-import Earth from './components/Earth';
-
+import Moon from './components/Moon'
+import EarthTwo from './components/EarthTwo';
 
 function App() {
   return (
     <div >
-      <Earth/>
+      <Moon/>
+      <EarthTwo/>
     </div>
   );
 }

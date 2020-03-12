@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import * as THREE from "three";
+import React,{useEffect} from 'react'
+import * as THREE from 'three'
 
-export default function Earth() {
-  useEffect(() => {
+export default function Moon() {
+    useEffect(() => {
     //=========INIT=========================//
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -20,15 +20,11 @@ export default function Earth() {
 
 
     //===========Geometry && MESH=============
-    var texture = new THREE.TextureLoader().load( 'https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/earthmap1k.jpg?token=AL3OIQXSOSGCOSEO6TH4SZS6OLTKW' );
-    var geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    var texture = new THREE.TextureLoader().load( 'https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/moonmap1k.jpg?token=AL3OIQWS4NDUTPXBVL2NT426OPXDU' );
+    var geometry = new THREE.SphereGeometry(0.3, 32, 32);
     var material = new THREE.MeshBasicMaterial( { map: texture } );
-    material.bumpMap  =new THREE.TextureLoader().load("https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/earthbump1k%20(2).jpg?token=AL3OIQT6AVDVPUPXS6KAVWC6OLV3A")
-    material.bumpScale = .5
-    // material.bumpScale = 12
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
-    // material.specular  = new THREE.Color('grey')
 
 
     camera.position.z = 5;
@@ -39,6 +35,10 @@ export default function Earth() {
       renderer.render(scene, camera);
     };
     animate();
-  }, []);
-  return <div></div>;
+    }, [])
+    return (
+        <div>
+            
+        </div>
+    )
 }
