@@ -26,7 +26,32 @@ export default function Moon() {
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
+//============
+// Galaxy
+let galaxyGeometry = new THREE.SphereGeometry(100, 32, 32);
+let galaxyMaterial = new THREE.MeshBasicMaterial({
+  side: THREE.BackSide
+});
+let galaxy = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
 
+// Load Galaxy Textures
+let textureLoader = new THREE.TextureLoader();
+textureLoader.crossOrigin = true;
+textureLoader.load(
+  'https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png',
+  function(texture) {
+    galaxyMaterial.map = texture;
+    scene.add(galaxy);
+  }
+);
+
+window.addEventListener('resize', function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+//=====================
     camera.position.z = 5;
     var animate = function() {
       requestAnimationFrame(animate);
