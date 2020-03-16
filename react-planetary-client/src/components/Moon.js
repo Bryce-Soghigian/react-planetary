@@ -3,38 +3,169 @@ import * as THREE from 'three'
 
 export default function Moon() {
     useEffect(() => {
-    //=========INIT=========================//
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
-      25,
-      window.innerWidth / window.innerHeight
+        // Scene, Camera, Renderer
+let renderer = new THREE.WebGLRenderer();
+let scene = new THREE.Scene();
+let aspect = window.innerWidth / window.innerHeight;
+let camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1500);
+let cameraRotation = 0;
+let cameraRotationSpeed = 0.001;
+let cameraAutoRotation = true;
+
+// Lights
+let hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
+hemiLight.color.setHSL( 0.6, 1, 0.6 );
+hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+hemiLight.position.set( 0, 50, 0 );
+scene.add( hemiLight );
+
+let hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
+scene.add( hemiLightHelper );
+// let spotLight = new THREE.SpotLight(0xffffff, 1, 0, 10, 2);
+
+// Texture Loader
+let textureLoader = new THREE.TextureLoader();
+
+// Planet proto 
+let planetProto = {
+  sphere: function(size) {
+    let sphere = new THREE.SphereGeometry(size, 32, 32);
+    
+    return sphere;
+  },
+  material: function(options) {
+    let material = new THREE.MeshPhongMaterial();
+    if (options) {
+      for (var property in options) {
+        material[property] = options[property];
+      } 
+    }
+    
+    return material;
+  },
+
+  texture: function(material, property, uri) {
+    let textureLoader = new THREE.TextureLoader();
+    textureLoader.crossOrigin = true;
+    textureLoader.load(
+      uri,
+      function(texture) {
+        material[property] = texture;
+        material.needsUpdate = true;
+      }
     );
-    var renderer = new THREE.WebGLRenderer();
-    var light = new THREE.PointLight(0xffffff, 10, 100);
-    light.position.set(50, 50, 50);
+  }
+};
+//Found function on codepen
+let createPlanet = function(options) {
+  // Create the planet's Surface
+  let surfaceGeometry = planetProto.sphere(options.surface.size);
+  let surfaceMaterial = planetProto.material(options.surface.material);
+  let surface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);
+  
 
-    scene.add(light);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-
-
-    //===========Geometry && MESH=============
-    var texture = new THREE.TextureLoader().load( 'https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/moonmap1k.jpg?token=AL3OIQWS4NDUTPXBVL2NT426OPXDU' );
-    var geometry = new THREE.SphereGeometry(0.3, 32, 32);
-    var material = new THREE.MeshBasicMaterial( { map: texture } );
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+//Merge into one object  
+  let planet = new THREE.Object3D();
+  surface.name = 'surface';
+  planet.add(surface);
 
 
-    camera.position.z = 5;
-    var animate = function() {
-      requestAnimationFrame(animate);
-    //   mesh.rotation.x += 0.01;
-      mesh.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    };
-    animate();
+  // Load the Surface's textures
+  for (let textureProperty in options.surface.textures) {
+    planetProto.texture(
+      surfaceMaterial,
+      textureProperty,
+      options.surface.textures[textureProperty]
+    ); 
+  }
+
+  
+  return planet;
+};
+
+let earth = createPlanet({
+  surface: {
+    size: 0.5,
+    material: {
+      bumpScale: 0.009,
+      specular: new THREE.Color('grey'),
+      shininess: 10
+    },
+    textures: {
+      map: 'https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/moonmap1k.jpg?token=AL3OIQSE4DIAHQPWZWQAXX26PDXCY',
+      bumpMap: 'https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/moonbump1k.jpg?token=AL3OIQVQCSG5L3UGHPAFWWK6PDXKG',
+    }
+  },
+
+
+
+
+});
+
+
+
+
+
+
+// Galaxy
+let galaxyGeometry = new THREE.SphereGeometry(100, 32, 32);
+let galaxyMaterial = new THREE.MeshBasicMaterial({
+  side: THREE.BackSide
+});
+let galaxy = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
+
+// Load Galaxy Textures
+textureLoader.crossOrigin = true;
+textureLoader.load(
+  'https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png',
+  function(texture) {
+    galaxyMaterial.map = texture;
+    scene.add(galaxy);
+  }
+);
+
+// Scene, Camera, Renderer Configuration
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+camera.position.set(1,1,1);
+
+scene.add(camera);
+// scene.add(spotLight);
+scene.add(earth);
+
+// Light Configurations
+// spotLight.position.set(2, 0, 1);
+
+// Mesh Configurations
+earth.receiveShadow = true;
+earth.castShadow = true;
+earth.getObjectByName('surface').geometry.center();
+
+// On window resize, adjust camera aspect ratio and renderer size
+window.addEventListener('resize', function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Main render function
+let render = function() {
+  earth.getObjectByName('surface').rotation.y += 1/32 * 0.01;
+
+  if (cameraAutoRotation) {
+    cameraRotation += cameraRotationSpeed;
+    camera.position.y = 0;
+    camera.position.x = 2 * Math.sin(cameraRotation);
+    camera.position.z = 2 * Math.cos(cameraRotation);
+    camera.lookAt(earth.position);
+  }
+  requestAnimationFrame(render);
+  renderer.render(scene, camera);
+};
+
+render();
+
     }, [])
     return (
         <div>
