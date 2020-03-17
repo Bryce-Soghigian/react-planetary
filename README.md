@@ -7,4 +7,4 @@
 	- Can pass props to all of the planets (orbital_controls=bool, size=num etc etc)
 	
 - v1.2 (future)
-	- Can import all planets into the same canvas and adjust their postions
+	- Can import all planets into the same canvas and adjust their positions
