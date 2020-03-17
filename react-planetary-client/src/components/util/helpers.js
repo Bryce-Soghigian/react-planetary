@@ -1,6 +1,10 @@
 import * as THREE from "three";
 
-
+/**
+ * @description Adds a moving galaxy to your scene
+ * @param {*} textureLoader pass it your current texture loader
+ * @param {*} scene pass it whatever you call your threejs scene
+ */
 export const galaxy_function = (textureLoader,scene) => {
 
     let galaxyGeometry = new THREE.SphereGeometry(100, 32, 32);
@@ -20,7 +24,10 @@ export const galaxy_function = (textureLoader,scene) => {
     );
     
   }
-
+/**
+ * 
+ * @description Optimized function of something i found on codepen
+ */
 export const createBasicPlanet = function(options) {
 
     //Planet prototype
