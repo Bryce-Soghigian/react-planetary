@@ -5,6 +5,7 @@ import Venus from './components/Venus';
 import Mercury from './components/Mercury';
 import Mars from './components/Mars';
 import Jupiter from './components/Jupiter';
+import Neptune from './components/Neptune';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Moon/>
       <Mars/>
       <Jupiter/>
+      <Neptune/>
       
       
 
