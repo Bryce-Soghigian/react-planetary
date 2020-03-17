@@ -1,12 +1,14 @@
 import React from 'react';
 import Moon from './components/Moon'
-import EarthTwo from './components/EarthTwo';
+import Earth from './components/Earth';
+import Venus from './components/Venus';
 
 function App() {
   return (
     <div >
       <Moon/>
-      <EarthTwo/>
+      <Earth/>
+      <Venus/>
     </div>
   );
 }
