@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import * as THREE from "three";
+import {createBasicPlanet,galaxy_function} from './util/helpers'
 
 export default function Moon() {
   useEffect(() => {
@@ -24,58 +25,9 @@ export default function Moon() {
     // Texture Loader
     let textureLoader = new THREE.TextureLoader();
 
-    // Planet proto
-    let planetProto = {
-      sphere: function(size) {
-        let sphere = new THREE.SphereGeometry(size, 32, 32);
 
-        return sphere;
-      },
-      material: function(options) {
-        let material = new THREE.MeshPhongMaterial();
-        if (options) {
-          for (var property in options) {
-            material[property] = options[property];
-          }
-        }
 
-        return material;
-      },
-
-      texture: function(material, property, uri) {
-        let textureLoader = new THREE.TextureLoader();
-        textureLoader.crossOrigin = true;
-        textureLoader.load(uri, function(texture) {
-          material[property] = texture;
-          material.needsUpdate = true;
-        });
-      }
-    };
-    //Found function on codepen
-    let createPlanet = function(options) {
-      // Create the planet's Surface
-      let surfaceGeometry = planetProto.sphere(options.surface.size);
-      let surfaceMaterial = planetProto.material(options.surface.material);
-      let surface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);
-
-      //Merge into one object
-      let planet = new THREE.Object3D();
-      surface.name = "surface";
-      planet.add(surface);
-
-      // Load the Surface's textures
-      for (let textureProperty in options.surface.textures) {
-        planetProto.texture(
-          surfaceMaterial,
-          textureProperty,
-          options.surface.textures[textureProperty]
-        );
-      }
-
-      return planet;
-    };
-
-    let earth = createPlanet({
+    let moon = createBasicPlanet({
       surface: {
         size: 0.5,
         material: {
@@ -93,21 +45,7 @@ export default function Moon() {
     });
 
     // Galaxy
-    let galaxyGeometry = new THREE.SphereGeometry(100, 32, 32);
-    let galaxyMaterial = new THREE.MeshBasicMaterial({
-      side: THREE.BackSide
-    });
-    let galaxy = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
-
-    // Load Galaxy Textures
-    textureLoader.crossOrigin = true;
-    textureLoader.load(
-      "https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png",
-      function(texture) {
-        galaxyMaterial.map = texture;
-        scene.add(galaxy);
-      }
-    );
+    galaxy_function(textureLoader,scene)
 
     // Scene, Camera, Renderer Configuration
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -116,12 +54,12 @@ export default function Moon() {
     camera.position.set(1, 1, 1);
 
     scene.add(camera);
-    scene.add(earth);
+    scene.add(moon);
 
     // Mesh Configurations
-    earth.receiveShadow = true;
-    earth.castShadow = true;
-    earth.getObjectByName("surface").geometry.center();
+    moon.receiveShadow = true;
+    moon.castShadow = true;
+    moon.getObjectByName("surface").geometry.center();
 
     // On window resize, adjust camera aspect ratio and renderer size
     window.addEventListener("resize", function() {
@@ -132,14 +70,14 @@ export default function Moon() {
 
     // Main render function
     let render = function() {
-      earth.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      moon.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
 
       if (cameraAutoRotation) {
         cameraRotation += cameraRotationSpeed;
         camera.position.y = 0;
         camera.position.x = 2 * Math.sin(cameraRotation);
         camera.position.z = 2 * Math.cos(cameraRotation);
-        camera.lookAt(earth.position);
+        camera.lookAt(moon.position);
       }
       requestAnimationFrame(render);
       renderer.render(scene, camera);

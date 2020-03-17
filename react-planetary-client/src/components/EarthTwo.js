@@ -1,5 +1,6 @@
 import React,{useEffect} from 'react'
 import * as THREE from 'three'
+import {galaxy_function} from './util/helpers'
 
 export default function EarthTwo() {
     useEffect(() => {
@@ -182,22 +183,9 @@ let earth = createPlanet({
 
 
 
-// Galaxy
-let galaxyGeometry = new THREE.SphereGeometry(100, 32, 32);
-let galaxyMaterial = new THREE.MeshBasicMaterial({
-  side: THREE.BackSide
-});
-let galaxy = new THREE.Mesh(galaxyGeometry, galaxyMaterial);
 
-// Load Galaxy Textures
-textureLoader.crossOrigin = true;
-textureLoader.load(
-  'https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/starfield.png',
-  function(texture) {
-    galaxyMaterial.map = texture;
-    scene.add(galaxy);
-  }
-);
+
+galaxy_function(textureLoader,scene)
 
 // Scene, Camera, Renderer Configuration
 renderer.setSize(window.innerWidth, window.innerHeight);
