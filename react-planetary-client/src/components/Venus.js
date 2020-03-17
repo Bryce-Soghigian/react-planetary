@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Moon() {
+export default function Venus() {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -27,7 +27,7 @@ export default function Moon() {
 
 
 
-    let moon = createBasicPlanet({
+    let venus = createBasicPlanet({
       surface: {
         size: 0.5,
         material: {
@@ -37,9 +37,9 @@ export default function Moon() {
         },
         textures: {
           map:
-            "https://i.imgur.com/iGN6Rd7.jpg",
+            "https://i.imgur.com/QxHasVS.jpg",
           bumpMap:
-            "https://i.imgur.com/OQu9jBK.jpg"
+            "https://i.imgur.com/5Zry4Tw.jpg"
         }
       }
     });
@@ -54,12 +54,12 @@ export default function Moon() {
     camera.position.set(1, 1, 1);
 
     scene.add(camera);
-    scene.add(moon);
+    scene.add(venus);
 
     // Mesh Configurations
-    moon.receiveShadow = true;
-    moon.castShadow = true;
-    moon.getObjectByName("surface").geometry.center();
+    venus.receiveShadow = true;
+    venus.castShadow = true;
+    venus.getObjectByName("surface").geometry.center();
 
     // On window resize, adjust camera aspect ratio and renderer size
     window.addEventListener("resize", function() {
@@ -70,14 +70,14 @@ export default function Moon() {
 
     // Main render function
     let render = function() {
-      moon.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      venus.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
 
       if (cameraAutoRotation) {
         cameraRotation += cameraRotationSpeed;
         camera.position.y = 0;
         camera.position.x = 2 * Math.sin(cameraRotation);
         camera.position.z = 2 * Math.cos(cameraRotation);
-        camera.lookAt(moon.position);
+        camera.lookAt(venus.position);
       }
       requestAnimationFrame(render);
       renderer.render(scene, camera);

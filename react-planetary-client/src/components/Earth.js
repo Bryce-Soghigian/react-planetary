@@ -1,44 +1,104 @@
 import React, { useEffect } from "react";
 import * as THREE from "three";
+import { galaxy_function, createEarth } from "./util/helpers";
 
 export default function Earth() {
   useEffect(() => {
-    //=========INIT=========================//
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
-      25,
-      window.innerWidth / window.innerHeight
-    );
-    var renderer = new THREE.WebGLRenderer();
-    var light = new THREE.PointLight(0xffffff, 10, 100);
-    light.position.set(50, 50, 50);
+    // Scene, Camera, Renderer
+    let renderer = new THREE.WebGLRenderer();
+    let scene = new THREE.Scene();
+    let aspect = window.innerWidth / window.innerHeight;
+    let camera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1500);
+    let cameraRotation = 0;
+    let cameraRotationSpeed = 0.001;
+    let cameraAutoRotation = true;
 
-    scene.add(light);
+    // Lights
+    let spotLight = new THREE.SpotLight(0xffffff, 1, 0, 10, 2);
+
+    // Texture Loader
+    let textureLoader = new THREE.TextureLoader();
+
+    let earth = createEarth(camera, {
+      surface: {
+        size: 0.5,
+        material: {
+          bumpScale: 0.05,
+          specular: new THREE.Color("grey"),
+          shininess: 10
+        },
+        textures: {
+          map:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthmap1k.jpg",
+          bumpMap:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthbump1k.jpg",
+          specularMap:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthspec1k.jpg"
+        }
+      },
+      atmosphere: {
+        size: 0.003,
+        material: {
+          opacity: 0.8
+        },
+        textures: {
+          map:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthcloudmap.jpg",
+          alphaMap:
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/141228/earthcloudmaptrans.jpg"
+        },
+        glow: {
+          size: 0.02,
+          intensity: 0.7,
+          fade: 7,
+          color: 0x93cfef
+        }
+      }
+    });
+
+    galaxy_function(textureLoader, scene);
+
+    // Scene, Camera, Renderer Configuration
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    camera.position.set(1, 1, 1);
 
+    scene.add(camera);
+    scene.add(spotLight);
+    scene.add(earth);
 
-    //===========Geometry && MESH=============
-    var texture = new THREE.TextureLoader().load( 'https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/earthmap1k.jpg?token=AL3OIQXSOSGCOSEO6TH4SZS6OLTKW' );
-    var geometry = new THREE.SphereGeometry(0.5, 32, 32);
-    var material = new THREE.MeshBasicMaterial( { map: texture } );
-    material.bumpMap  =new THREE.TextureLoader().load("https://raw.githubusercontent.com/Bryce-Soghigian/react-planetary/master/react-planetary-client/src/components/images/earthbump1k%20(2).jpg?token=AL3OIQT6AVDVPUPXS6KAVWC6OLV3A")
-    material.bumpScale = .5
-    // material.bumpScale = 12
-    var mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-    // material.specular  = new THREE.Color('grey')
+    // Light Configurations
+    spotLight.position.set(2, 0, 1);
 
+    // Mesh Configurations
+    earth.receiveShadow = true;
+    earth.castShadow = true;
+    earth.getObjectByName("surface").geometry.center();
 
-    camera.position.z = 5;
-    var animate = function() {
-      requestAnimationFrame(animate);
-    //   mesh.rotation.x += 0.01;
-      mesh.rotation.y += 0.01;
+    // On window resize, adjust camera aspect ratio and renderer size
+    window.addEventListener("resize", function() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Main render function
+    let render = function() {
+      earth.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      earth.getObjectByName("atmosphere").rotation.y += (1 / 6) * 0.01;
+      if (cameraAutoRotation) {
+        cameraRotation += cameraRotationSpeed;
+        camera.position.y = 0;
+        camera.position.x = 2 * Math.sin(cameraRotation);
+        camera.position.z = 2 * Math.cos(cameraRotation);
+        camera.lookAt(earth.position);
+      }
+      requestAnimationFrame(render);
       renderer.render(scene, camera);
     };
-    animate();
+
+    render();
   }, []);
   return <div></div>;
 }
