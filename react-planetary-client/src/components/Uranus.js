@@ -90,6 +90,9 @@ export default function Uranus() {
         };
     
         render();
+        return () => {
+            document.body.removeChild( renderer.domElement );
+        };
     }, [])
     return (
         <div>

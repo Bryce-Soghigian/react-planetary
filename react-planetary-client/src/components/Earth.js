@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import { galaxy_function, createEarth } from "./util/helpers";
 
-export default function Earth() {
+export default function Earth(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -21,7 +21,7 @@ export default function Earth() {
 
     let earth = createEarth(camera, {
       surface: {
-        size: 0.5,
+        size: props.size || .5,
         material: {
           bumpScale: 0.05,
           specular: new THREE.Color("grey"),
@@ -99,6 +99,9 @@ export default function Earth() {
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }

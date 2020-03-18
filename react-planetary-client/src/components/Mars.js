@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Mars() {
+export default function Mars(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -29,7 +29,7 @@ export default function Mars() {
 
     let mars = createBasicPlanet({
       surface: {
-        size: 0.5,
+        size: props.size || .4,
         material: {
           bumpScale: 0.05,
           specular: new THREE.Color("grey"),
@@ -84,6 +84,9 @@ export default function Mars() {
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }

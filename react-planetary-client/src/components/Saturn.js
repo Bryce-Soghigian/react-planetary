@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import * as THREE from "three";
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import { createBasicPlanet, galaxy_function } from "./util/helpers";
 export default function Saturn() {
   useEffect(() => {
@@ -11,7 +10,6 @@ export default function Saturn() {
     let cameraRotation = 0;
     let cameraRotationSpeed = 0.001;
     let cameraAutoRotation = true;
-    let controls = new OrbitControls( camera, renderer.domElement );
 
 
     // Lights
@@ -88,11 +86,13 @@ export default function Saturn() {
 
       }
       requestAnimationFrame(render);
-      controls.update();
       renderer.render(scene, camera);
     };
 
     render();
+    return () => {
+        document.body.removeChild( renderer.domElement );
+    };
   }, []);
 
   return <div></div>;

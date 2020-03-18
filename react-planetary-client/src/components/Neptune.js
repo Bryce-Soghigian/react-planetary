@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Neptune() {
+export default function Neptune(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -29,7 +29,7 @@ export default function Neptune() {
 
     let neptune = createBasicPlanet({
       surface: {
-        size: 0.5,
+        size: props.size || 0.5,
         material: {
           bumpScale: 0.000,
           specular: new THREE.Color("grey"),
@@ -84,6 +84,9 @@ export default function Neptune() {
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }
