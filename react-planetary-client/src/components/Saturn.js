@@ -49,7 +49,7 @@ export default function Saturn() {
     document.body.appendChild(renderer.domElement);
 
     //Ring configuration
-    var ring_geometry = new THREE.RingGeometry(.6, .8, 32);
+    var ring_geometry = new THREE.TorusGeometry(.7, .06, 10, 100);
     var ring_texture = textureLoader.load("https://i.imgur.com/MoOoKkt.jpg")
     let ring_material = new THREE.MeshBasicMaterial(  {map: ring_texture},{side:THREE.DoubleSide });
     var ring_mesh = new THREE.Mesh(ring_geometry, ring_material);
