@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Jupiter() {
+export default function Mars(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -27,19 +27,19 @@ export default function Jupiter() {
 
 
 
-    let jupiter = createBasicPlanet({
+    let mars = createBasicPlanet({
       surface: {
-        size: 0.5,
+        size: props.size || .4,
         material: {
-          bumpScale: 0.000,
+          bumpScale: 0.05,
           specular: new THREE.Color("grey"),
           shininess: 10
         },
         textures: {
           map:
-            "https://i.imgur.com/qUzuQr6.jpg",
+            "https://i.imgur.com/xu5OXIB.jpg",
           bumpMap:
-            ""
+            "https://i.imgur.com/VEjn3Pm.jpg"
         }
       }
     });
@@ -54,12 +54,12 @@ export default function Jupiter() {
     camera.position.set(1, 1, 1);
 
     scene.add(camera);
-    scene.add(jupiter);
+    scene.add(mars);
 
     // Mesh Configurations
-    jupiter.receiveShadow = true;
-    jupiter.castShadow = true;
-    jupiter.getObjectByName("surface").geometry.center();
+    mars.receiveShadow = true;
+    mars.castShadow = true;
+    mars.getObjectByName("surface").geometry.center();
 
     // On window resize, adjust camera aspect ratio and renderer size
     window.addEventListener("resize", function() {
@@ -70,20 +70,23 @@ export default function Jupiter() {
 
     // Main render function
     let render = function() {
-      jupiter.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      mars.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
 
       if (cameraAutoRotation) {
         cameraRotation += cameraRotationSpeed;
         camera.position.y = 0;
         camera.position.x = 2 * Math.sin(cameraRotation);
         camera.position.z = 2 * Math.cos(cameraRotation);
-        camera.lookAt(jupiter.position);
+        camera.lookAt(mars.position);
       }
       requestAnimationFrame(render);
       renderer.render(scene, camera);
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }

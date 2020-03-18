@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Venus() {
+export default function Mercury(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -27,19 +27,19 @@ export default function Venus() {
 
 
 
-    let venus = createBasicPlanet({
+    let mercury = createBasicPlanet({
       surface: {
-        size: 0.5,
+        size: props.size || 0.3,
         material: {
-          bumpScale: 0.009,
-          specular: new THREE.Color("grey"),
+          bumpScale: 0.005,
+          specular: new THREE.Color("red"),
           shininess: 10
         },
         textures: {
           map:
-            "https://i.imgur.com/QxHasVS.jpg",
+            "https://i.imgur.com/yCk1mZQ.jpg",
           bumpMap:
-            "https://i.imgur.com/5Zry4Tw.jpg"
+            "https://i.imgur.com/7wqmsEi.jpg"
         }
       }
     });
@@ -54,12 +54,12 @@ export default function Venus() {
     camera.position.set(1, 1, 1);
 
     scene.add(camera);
-    scene.add(venus);
+    scene.add(mercury);
 
     // Mesh Configurations
-    venus.receiveShadow = true;
-    venus.castShadow = true;
-    venus.getObjectByName("surface").geometry.center();
+    mercury.receiveShadow = true;
+    mercury.castShadow = true;
+    mercury.getObjectByName("surface").geometry.center();
 
     // On window resize, adjust camera aspect ratio and renderer size
     window.addEventListener("resize", function() {
@@ -70,20 +70,23 @@ export default function Venus() {
 
     // Main render function
     let render = function() {
-      venus.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      mercury.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
 
       if (cameraAutoRotation) {
         cameraRotation += cameraRotationSpeed;
         camera.position.y = 0;
         camera.position.x = 2 * Math.sin(cameraRotation);
         camera.position.z = 2 * Math.cos(cameraRotation);
-        camera.lookAt(venus.position);
+        camera.lookAt(mercury.position);
       }
       requestAnimationFrame(render);
       renderer.render(scene, camera);
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }

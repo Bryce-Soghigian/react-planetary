@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Mars() {
+export default function Moon(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -27,19 +27,19 @@ export default function Mars() {
 
 
 
-    let mars = createBasicPlanet({
+    let moon = createBasicPlanet({
       surface: {
-        size: 0.5,
+        size: props.size || 0.5,
         material: {
-          bumpScale: 0.05,
+          bumpScale: 0.009,
           specular: new THREE.Color("grey"),
           shininess: 10
         },
         textures: {
           map:
-            "https://i.imgur.com/xu5OXIB.jpg",
+            "https://i.imgur.com/iGN6Rd7.jpg",
           bumpMap:
-            "https://i.imgur.com/VEjn3Pm.jpg"
+            "https://i.imgur.com/OQu9jBK.jpg"
         }
       }
     });
@@ -54,12 +54,12 @@ export default function Mars() {
     camera.position.set(1, 1, 1);
 
     scene.add(camera);
-    scene.add(mars);
+    scene.add(moon);
 
     // Mesh Configurations
-    mars.receiveShadow = true;
-    mars.castShadow = true;
-    mars.getObjectByName("surface").geometry.center();
+    moon.receiveShadow = true;
+    moon.castShadow = true;
+    moon.getObjectByName("surface").geometry.center();
 
     // On window resize, adjust camera aspect ratio and renderer size
     window.addEventListener("resize", function() {
@@ -70,20 +70,23 @@ export default function Mars() {
 
     // Main render function
     let render = function() {
-      mars.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      moon.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
 
       if (cameraAutoRotation) {
         cameraRotation += cameraRotationSpeed;
         camera.position.y = 0;
         camera.position.x = 2 * Math.sin(cameraRotation);
         camera.position.z = 2 * Math.cos(cameraRotation);
-        camera.lookAt(mars.position);
+        camera.lookAt(moon.position);
       }
       requestAnimationFrame(render);
       renderer.render(scene, camera);
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }

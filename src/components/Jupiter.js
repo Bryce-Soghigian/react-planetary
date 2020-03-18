@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as THREE from "three";
 import {createBasicPlanet,galaxy_function} from './util/helpers'
 
-export default function Mercury() {
+export default function Jupiter(props) {
   useEffect(() => {
     // Scene, Camera, Renderer
     let renderer = new THREE.WebGLRenderer();
@@ -27,19 +27,19 @@ export default function Mercury() {
 
 
 
-    let mercury = createBasicPlanet({
+    let jupiter = createBasicPlanet({
       surface: {
-        size: 0.5,
+        size: props.size || 0.5,
         material: {
-          bumpScale: 0.005,
-          specular: new THREE.Color("red"),
+          bumpScale: 0.000,
+          specular: new THREE.Color("grey"),
           shininess: 10
         },
         textures: {
           map:
-            "https://i.imgur.com/yCk1mZQ.jpg",
+            "https://i.imgur.com/qUzuQr6.jpg",
           bumpMap:
-            "https://i.imgur.com/7wqmsEi.jpg"
+            ""
         }
       }
     });
@@ -54,12 +54,12 @@ export default function Mercury() {
     camera.position.set(1, 1, 1);
 
     scene.add(camera);
-    scene.add(mercury);
+    scene.add(jupiter);
 
     // Mesh Configurations
-    mercury.receiveShadow = true;
-    mercury.castShadow = true;
-    mercury.getObjectByName("surface").geometry.center();
+    jupiter.receiveShadow = true;
+    jupiter.castShadow = true;
+    jupiter.getObjectByName("surface").geometry.center();
 
     // On window resize, adjust camera aspect ratio and renderer size
     window.addEventListener("resize", function() {
@@ -70,20 +70,23 @@ export default function Mercury() {
 
     // Main render function
     let render = function() {
-      mercury.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
+      jupiter.getObjectByName("surface").rotation.y += (1 / 32) * 0.01;
 
       if (cameraAutoRotation) {
         cameraRotation += cameraRotationSpeed;
         camera.position.y = 0;
         camera.position.x = 2 * Math.sin(cameraRotation);
         camera.position.z = 2 * Math.cos(cameraRotation);
-        camera.lookAt(mercury.position);
+        camera.lookAt(jupiter.position);
       }
       requestAnimationFrame(render);
       renderer.render(scene, camera);
     };
 
     render();
-  }, []);
+    return () => {
+      document.body.removeChild( renderer.domElement );
+  };
+  }, [props]);
   return <div></div>;
 }
