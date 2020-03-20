@@ -30,6 +30,7 @@ exports.Moon = Moon;
 exports.Jupiter = Jupiter;
 exports.Uranus = Uranus;
 exports.Neptune = Neptune;
+exports.Mars = Mars;
 exports.createEarth = exports.createBasicPlanet = exports.galaxy_function = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
