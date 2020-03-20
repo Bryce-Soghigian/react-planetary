@@ -10,6 +10,19 @@
 	- Can import all planets into the same canvas and adjust their positions
 
 
+## How to use
+```
+npm i react-planetary || yarn add react-planetary
+```
+
+```javascript
+import {Earth, Uranus, Mars,Venus, Mercury,Moon, Jupiter,Neptune,Saturn} from 'react-planetary/index'
+```
+- then just call the react component 
+
+```javascript
+<Earth/>
+```
 ## Components(version 1.0.0)
 - Note all props are optional
 - Earth (Props: size) <Earth size={.3}/>

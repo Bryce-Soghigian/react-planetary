@@ -1,11 +1,13 @@
 {
   "name": "react-planetary",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.9",
+  "main": "index.js",
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "three": "^0.114.0"
+  },
+  "peerDependencies": {
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
@@ -39,6 +41,11 @@
     "@storybook/addon-links": "^5.3.17",
     "@storybook/addons": "^5.3.17",
     "@storybook/preset-create-react-app": "^2.0.0",
-    "@storybook/react": "^5.3.17"
+    "@storybook/react": "^5.3.17",
+    "path": "^0.12.7",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-scripts": "3.4.0",
+    "three": "^0.114.0"
   }
 }
