@@ -1,7 +1,12 @@
 {
   "name": "react-planetary",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "index.js",
+  "dependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "three": "^0.114.0"
+  },
   "peerDependencies": {
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
