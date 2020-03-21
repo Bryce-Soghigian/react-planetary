@@ -1,3 +1,7 @@
+#Demo 
+https://determined-tesla-0063a7.netlify.com/
+
+
 # Key Features
 
 - v1.0 (current)
@@ -25,13 +29,13 @@ import {Earth, Uranus, Mars,Venus, Mercury,Moon, Jupiter,Neptune,Saturn} from 'r
 ```
 ## Components(version 1.0.0)
 - Note all props are optional
-- Earth (Props: size) <Earth size={.3}/>
-- Moon (Props size) <Moon size={.1}/>
-- Mercury (Props: size) <Mercury size={.2}/>
-- Venus (Props: size) <Venus size={.3}/>
-- Neptune (Props: size) <Neptune size={.4}/>
-- Jupiter (Props: size) <Jupiter size={.7}/>
-- Mars (Props: size) <Mars size={.24}/>
+- Earth (Props: size) <img src="./Earth.png"/>
+- Moon (Props size) <img src="./Moon.png"/>
+- Mercury (Props: size) <img src="./Mercury.png"/>
+- Venus (Props: size) <img src="./Venus.png">
+- Neptune (Props: size) <img src="./Neptune.png"/>
+- Jupiter (Props: size) <img src="./Jupiter.png"/>
+- Mars (Props: size) <img src="Mars.png"/>
 ### Experiemental Components 
 - Uranus <Uranus/>
 - Saturn <Saturn/>
