@@ -1,6 +1,13 @@
 #Demo 
 https://determined-tesla-0063a7.netlify.com/
+# Code
+-You can find all of the code at
+https://github.com/Bryce-Soghigian/react-planetary.git
 
+#Author
+- Bryce Soghigian
+- Link to my Github with all my other coding projects
+https://github.com/Bryce-Soghigian
 
 # Key Features
 
