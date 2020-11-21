@@ -1,5 +1,5 @@
 #Demo 
-https://determined-tesla-0063a7.netlify.com/
+https://react-planetary-earth-example.netlify.app/
 # Code
 -You can find all of the code at
 https://github.com/Bryce-Soghigian/react-planetary.git
@@ -11,14 +11,13 @@ https://github.com/Bryce-Soghigian
 
 # Key Features
 
-- v1.0 (current)
+- v1.11 (current)
 	- Can Import all Planets into your application
-      
-- v1.1 (next)
-	- Can pass props to all of the planets (orbital_controls=bool, size=num rotation etc etc)
+    - Can pass props to all of the planets (orbital_controls=bool, size=num rotation etc etc)
+	- Can create your own planets in threejs with my helper functions
+
+
 	
-- v1.2 (future)
-	- Can import all planets into the same canvas and adjust their positions
 
 
 ## How to use
@@ -38,6 +37,9 @@ import {Earth, Uranus, Mars,Venus, Mercury,Moon, Jupiter,Neptune,Saturn} from 'r
 
 galaxy_function("Your texture loader","your threeJS scene")
 
+
+
+# Example
 
 ```
 export const galaxy_function = (textureLoader,scene) => {
@@ -60,7 +62,29 @@ export const galaxy_function = (textureLoader,scene) => {
     
   }
   ```
-Create your own planets
+Create your own planets with createBasicPlanet
+
+```
+            let exoplanet = createBasicPlanet({
+                surface: {
+                  size: props.state.pl_radj*0.8 || .2,
+                  material: {
+                    bumpScale: 0.000,
+                    specular: new THREE.Color("grey"),
+                    shininess: 10
+                  },
+                  textures: {
+                    map:
+                    texture_array[Math.floor(Math.random() * Math.floor(11))],
+                    bumpMap:
+                      ""
+                  }
+                }
+              });
+```
+
+
+# Example
   ```
 import React,{useEffect} from 'react'
 import {createBasicPlanet,galaxy_function} from 'react-planetary/index'
